@@ -1,0 +1,36 @@
+=pod
+
+=encoding utf8
+
+=head1 NAME
+
+L<XLS::Simple> xls读取写入
+
+=head1 FUNCTION
+
+=begin html
+
+实例参考<a href="xt/">xt子文件夹</a>
+
+=end html
+
+=head2 write_xls
+
+写入xls
+
+    write_xls([ ['测试', '写入' ] ], 
+        'test.xlsx', 
+        header=> ['一二', '三四'], 
+        charset=>'utf8');
+
+=head2 read_xls
+
+读取xls
+
+    my $header = read_xls( 'test.xlsx', only_header => 1, );
+
+    my $data = read_xls( 'test.xlsx', skip_header => 1, );
+
+    my $all = read_xls( 'test.xlsx', );
+
+=cut
