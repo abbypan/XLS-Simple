@@ -83,3 +83,51 @@ sub read_xls {
 }
 
 1;
+
+=encoding utf8
+
+=head1 NAME
+
+XLS::Simple - functions for reading and writing XLSX format spreadsheets
+
+=head1 SYNOPSIS
+
+To create a spreadsheet:
+
+ my $header =  ['Vegetable', 'Color'];
+ my $rows   = [
+               ['Carrot',    'Orange'],
+               ['Tomato',    'Red'],
+               ['Pea',       'Green'],
+              ];
+ write_xls($rows, 'test.xlsx', header => $header);
+
+To read a spreadsheet:
+
+    my $all = read_xls( 'test.xlsx', );
+
+=head1 DESCRIPTION
+
+This module provides two functions for creating and reading spreadsheets
+in Microsoft's XLSX format.
+
+=head2 write_xls
+
+写入xls
+
+    write_xls([ ['测试', '写入' ] ],
+        'test.xlsx',
+        header=> ['一二', '三四'],
+        charset=>'utf8');
+
+=head2 read_xls
+
+读取xls
+
+    my $header = read_xls( 'test.xlsx', only_header => 1, );
+
+    my $data = read_xls( 'test.xlsx', skip_header => 1, );
+
+    my $all = read_xls( 'test.xlsx', );
+
+=cut
