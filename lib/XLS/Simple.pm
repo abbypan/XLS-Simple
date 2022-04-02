@@ -1,15 +1,16 @@
-#ABSTRACT: read xls / write xls 读写 xls
+#ABSTRACT: read xls / write xls
 package XLS::Simple;
 
 require Exporter;
 @ISA    = qw(Exporter);
-@EXPORT = qw(write_xls read_xls);
+@EXPORT = qw(write_xls read_xls read_xlsx);
 
-our $VERSION=0.02;
+our $VERSION=0.021;
 
 use Encode;
 use Excel::Writer::XLSX;
 use Spreadsheet::Read;
+use Spreadsheet::XLSX;
 
 use strict;
 use warnings;
@@ -67,8 +68,27 @@ sub format_xls_data {
     return $data;
 }
 
+sub read_xlsx {
+    my ($xlsx, %opt) = @_;
+    my $excel = Spreadsheet::XLSX->new($xlsx);
+    my @res;
+    for my $sheet (@{$excel->{Worksheet}}){
+        my $max_row = $sheet->{MaxRow} || $sheet->{MinRow};
+        for my $row ($sheet->{MinRow} .. $max_row){
+            my $max_col = $sheet->{MaxCol} || $sheet->{MinCol};
+            my @data = map { $sheet->{Cells}[$row][$_]{Val} } 
+            ($sheet->{MinCol} .. $max_col);
+            push @res, \@data;
+            return \@data if($opt{only_header});
+        }
+    }
+    shift @res if ( $opt{skip_header} );
+    return \@res;
+}
+
 sub read_xls {
     my ( $xls, %opt ) = @_;
+    return read_xlsx($xls, %opt) if($xls=~/\.xlsx$/i);
 
     my $workbook = ReadData($xls);
 
